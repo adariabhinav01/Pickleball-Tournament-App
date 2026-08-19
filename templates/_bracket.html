@@ -1,0 +1,74 @@
+<div id="bracket">
+  {% if message %}
+    <p class="banner {{ 'ok' if ok else 'error' }}">{{ message }}</p>
+  {% endif %}
+
+  {% if champion %}
+  <div class="champion-banner">
+    <div class="champion-text">🏆 Congratulations, {{ champion.name }} — {{ champion.player1_name }} &amp; {{ champion.player2_name }}!</div>
+    <span class="champion-sub">Tournament Champions</span>
+  </div>
+  {% endif %}
+
+  {% set stage_groups = [("Quarterfinals", ["QF1", "QF2", "QF3", "QF4"]),
+                          ("Semifinals", ["SF1", "SF2"]),
+                          ("Final", ["Final"])] %}
+  {% set by_code = {} %}
+  {% for m in matches %}{% set _ = by_code.update({m.stage_code: m}) %}{% endfor %}
+
+  <div class="bracket">
+    {% for group_label, codes in stage_groups %}
+      <div class="bracket-col">
+        <h3>{{ group_label }}</h3>
+        {% for code in codes %}
+          {% set m = by_code[code] %}
+          <div class="bracket-slot">
+          <div class="match-card">
+            {% if code == 'Final' and show_confetti %}
+            <div class="confetti-burst">
+              {% for c in confetti %}
+              <span class="confetti-piece" style="--tx:{{ c.tx }}px; --ty:{{ c.ty }}px; background:{{ c.color }}; animation-delay:{{ c.delay }}s;"></span>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <div class="stage-label">{{ m.stage_label }}</div>
+            {% if m.team_a_id and m.team_b_id %}
+              <div class="matchup-team {{ 'winner' if m.winner_team_id == m.team_a_id }}">
+                <span class="team-name">{{ teams[m.team_a_id].name }}</span>
+                <span class="players">{{ teams[m.team_a_id].player1_name }}</span>
+                <span class="players">{{ teams[m.team_a_id].player2_name }}</span>
+              </div>
+              <div class="matchup-team {{ 'winner' if m.winner_team_id == m.team_b_id }}">
+                <span class="team-name">{{ teams[m.team_b_id].name }}</span>
+                <span class="players">{{ teams[m.team_b_id].player1_name }}</span>
+                <span class="players">{{ teams[m.team_b_id].player2_name }}</span>
+              </div>
+              <form hx-post="{{ url_for('submit_playoff', stage_code=code) }}" hx-target="#bracket" hx-swap="outerHTML">
+                <span class="game-pair">
+                  <input type="number" name="g1_a" class="score-input" value="{{ m.game1_a if m.game1_a is not none else '' }}" min="0" required>
+                  <span class="score-vs">–</span>
+                  <input type="number" name="g1_b" class="score-input" value="{{ m.game1_b if m.game1_b is not none else '' }}" min="0" required>
+                </span>
+                <span class="game-pair">
+                  <input type="number" name="g2_a" class="score-input" value="{{ m.game2_a if m.game2_a is not none else '' }}" min="0">
+                  <span class="score-vs">–</span>
+                  <input type="number" name="g2_b" class="score-input" value="{{ m.game2_b if m.game2_b is not none else '' }}" min="0">
+                </span>
+                <span class="game-pair">
+                  <input type="number" name="g3_a" class="score-input" value="{{ m.game3_a if m.game3_a is not none else '' }}" min="0">
+                  <span class="score-vs">–</span>
+                  <input type="number" name="g3_b" class="score-input" value="{{ m.game3_b if m.game3_b is not none else '' }}" min="0">
+                </span>
+                <input type="date" name="match_date" value="{{ m.match_date or DEFAULT_PLAYOFF_DATE }}">
+                <button type="submit">Submit</button>
+              </form>
+            {% else %}
+              <div class="tbd">TBD — waiting on feeder match(es)</div>
+            {% endif %}
+          </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Standings — Chandler Friends Pickleball{% endblock %}
+{% block content %}
+  <h2>Standings</h2>
+  <p class="subtitle">Live view updates as scores are entered; the second table refreshes automatically every few seconds.</p>
+  <div hx-get="{{ url_for('standings_partial') }}" hx-trigger="every 5s" hx-swap="innerHTML">
+    {% include "_standings_tables.html" %}
+  </div>
+{% endblock %}

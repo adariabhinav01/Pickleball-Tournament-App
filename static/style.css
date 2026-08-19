@@ -1,0 +1,555 @@
+/* Chandler Friends Pickleball — design tokens & shared styles */
+
+:root {
+  --bg: #f4f5f2;
+  --surface: #ffffff;
+  --surface-2: #fafaf8;
+  --border: #e2e4de;
+  --border-strong: #cfd2c8;
+  --text: #1f2420;
+  --text-muted: #6b7268;
+  --accent: #2e7d32;
+  --accent-strong: #1b5e20;
+  --accent-soft: #e8f3e6;
+  --accent-contrast: #ffffff;
+  --warn-bg: #fdecea;
+  --warn-text: #a32a1f;
+  --gold: #b7860b;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgba(20, 30, 20, 0.06), 0 1px 8px rgba(20, 30, 20, 0.05);
+  --shadow-hover: 0 2px 4px rgba(20, 30, 20, 0.08), 0 4px 16px rgba(20, 30, 20, 0.08);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14170f;
+    --surface: #1c2018;
+    --surface-2: #20241b;
+    --border: #333a2c;
+    --border-strong: #454e3a;
+    --text: #eaece5;
+    --text-muted: #a2a99a;
+    --accent: #4caf50;
+    --accent-strong: #7fce82;
+    --accent-soft: #223223;
+    --accent-contrast: #0c1409;
+    --warn-bg: #3a1f1c;
+    --warn-text: #ff8a7a;
+    --gold: #e0b23a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 8px rgba(0, 0, 0, 0.25);
+    --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body { background: var(--bg); }
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  margin: 0;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------- header --- */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1.5rem;
+  backdrop-filter: saturate(1.4) blur(6px);
+}
+
+.header-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+nav { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+
+nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, color 0.15s;
+}
+nav a:hover { background: var(--accent-soft); color: var(--accent-strong); }
+nav a.active { background: var(--accent); color: var(--accent-contrast); }
+
+/* ----------------------------------------------------------------- layout --- */
+
+main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+h2 {
+  color: var(--text);
+  font-size: 1.4rem;
+  margin: 0 0 1rem;
+  letter-spacing: -0.01em;
+}
+h3 {
+  color: var(--text);
+  font-size: 1.05rem;
+  margin: 1.75rem 0 0.6rem;
+}
+h3:first-child { margin-top: 0; }
+
+.subtitle { color: var(--text-muted); margin: -0.5rem 0 1.25rem; font-size: 0.95rem; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+@media (max-width: 760px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ------------------------------------------------------------------ tables --- */
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+}
+table.bare { box-shadow: none; border: none; }
+
+th, td {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+th {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--surface-2); }
+
+table.standings td:first-child, table.standings th:first-child { text-align: center; width: 2.5rem; }
+/* The playoff table's first column is the team (not a numeric rank/seed) --
+   don't force it into that narrow centered layout. */
+table.standings.playoff-table td:first-child, table.standings.playoff-table th:first-child {
+  text-align: left;
+  width: auto;
+}
+
+.team-cell { white-space: normal; line-height: 1.3; }
+.team-cell .team-name-cell { display: block; font-weight: 600; }
+.team-cell .players { display: block; font-size: 0.78rem; color: var(--text-muted); font-weight: 400; }
+
+tr.playoff-cutoff td { border-bottom: 2px solid var(--accent); }
+tr.playoff-cutoff-label td {
+  padding: 0.15rem 0.75rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+/* -------------------------------------------------------------- round nav --- */
+
+.round-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+}
+.round-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.4rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+}
+.round-nav a:hover { border-color: var(--accent); color: var(--accent-strong); }
+.round-nav a.current { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
+.round-nav a.done::after { content: " \2713"; }
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.bye-note {
+  color: var(--text-muted);
+  font-style: italic;
+  margin: -0.3rem 0 0.9rem;
+}
+
+.hint { font-weight: 400; color: var(--text-muted); font-size: 0.82rem; }
+
+/* -------------------------------------------------------------- banners --- */
+
+.banner {
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+.banner.ok { background: var(--accent-soft); color: var(--accent-strong); }
+.banner.error { background: var(--warn-bg); color: var(--warn-text); }
+.error { color: var(--warn-text); font-weight: 600; }
+
+/* ------------------------------------------------------------------- forms --- */
+
+label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+
+input[type=text], input[type=number], input[type=date] {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.92rem;
+  font-family: inherit;
+}
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Hide the native up/down spinner on number inputs (score fields) — typing
+   digits directly is all that's needed here. */
+input[type=number] { appearance: textfield; -moz-appearance: textfield; }
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.score-input { width: 3.6rem; text-align: center; }
+
+button {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: none;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.88rem;
+  transition: background 0.15s, transform 0.05s;
+}
+button:hover { background: var(--accent-strong); }
+button:active { transform: scale(0.98); }
+button:disabled { background: var(--border-strong); color: var(--text-muted); cursor: not-allowed; }
+
+.settings-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.9rem 1.2rem; align-items: end; }
+.settings-form label { display: flex; flex-direction: column; gap: 0.3rem; }
+.settings-form button { grid-column: 1 / -1; justify-self: start; }
+
+/* htmx in-flight indicator */
+.htmx-request.match-row, .htmx-request.match-card { opacity: 0.5; }
+.htmx-request button { opacity: 0.7; }
+
+/* ------------------------------------------------------------- match rows --- */
+
+.match-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.match-row:last-child { border-bottom: none; }
+
+.match-num { color: var(--text-muted); font-size: 0.8rem; flex: 0 0 auto; }
+
+/* Team names + score inputs grouped tightly together, anchored to a fixed
+   start position right after the match number. (Deliberately NOT centered:
+   centering would put it in the middle of whatever space is left over after
+   .match-actions, whose width varies row to row -- e.g. a "Submit" vs
+   "Update" button label -- which shifted the scoreboard left/right
+   inconsistently between rows in the same round.) */
+.scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.45rem;
+  flex: 1 1 320px;
+}
+/* Fixed (not max-) width, same for every row, so the score column always
+   starts at the same X position regardless of how long a given row's team
+   name happens to be. Long names wrap to a second line inside this fixed
+   box rather than being truncated. */
+.team-block {
+  display: flex;
+  flex-direction: column;
+  width: 9.5rem;
+  flex: 0 0 9.5rem;
+}
+.team-block .team-name {
+  font-weight: 600;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+.team-block .players {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+.team-block.team-a { align-items: flex-end; text-align: right; }
+.team-block.team-b { align-items: flex-start; text-align: left; }
+.score-vs { color: var(--text-muted); font-weight: 700; }
+
+.match-actions { display: flex; align-items: center; gap: 0.5rem; flex: 0 0 auto; }
+
+@media (max-width: 640px) {
+  .match-row { justify-content: flex-start; }
+  .scoreboard { flex-basis: 100%; justify-content: flex-start; }
+  .team-block { width: 7.5rem; flex-basis: 7.5rem; }
+}
+
+/* ------------------------------------------------------------------ setup --- */
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.team-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.9rem 1rem;
+}
+.team-card .team-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-weight: 700;
+  font-size: 0.78rem;
+  margin-right: 0.4rem;
+}
+.team-card input[type=text] { width: 100%; margin-bottom: 0.4rem; }
+.team-card .player-row { display: grid; grid-template-columns: 1.6fr 1fr; gap: 0.4rem; margin-bottom: 0.4rem; }
+.team-card .player-row input { width: 100%; }
+.team-card .dupr-hint { font-size: 0.72rem; color: var(--text-muted); }
+.team-card .email-input { font-size: 0.82rem; color: var(--text-muted); }
+
+/* ---------------------------------------------------------------- bracket --- */
+
+.bracket {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+.bracket-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 250px;
+  flex: 1;
+}
+.bracket-col h3 {
+  text-align: center;
+  margin: 0 0 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+/* Each round's match-cards sit in an equal-weight flex slot within their own
+   column. Because every column is stretched (align-items:stretch, the
+   default) to the height of the tallest one -- always Quarterfinals, which
+   has the most slots -- a column with fewer slots (Semis: 2, Final: 1) ends
+   up with proportionally *taller* slots (H/2, H) than Quarterfinals' (H/4).
+   Centering each match-card within its slot then lines SF1 up exactly on
+   the midpoint between QF1+QF2, SF2 on the midpoint between QF3+QF4, and the
+   Final on the midpoint between SF1+SF2 -- regardless of whether any given
+   card is a short "TBD" placeholder or a fully filled-in scoreboard, since
+   alignment depends only on slot count, not on card content height. */
+.bracket-slot {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+}
+.match-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.7rem 0.85rem;
+  margin: 0.5rem 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.match-card .stage-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+.match-card .matchup-team {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0;
+}
+.match-card .matchup-team .team-name,
+.match-card .matchup-team .players {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.match-card .matchup-team .team-name { font-weight: 600; }
+.match-card .matchup-team .players { font-size: 0.72rem; color: var(--text-muted); }
+.match-card .matchup-team.winner .team-name { color: var(--accent-strong); }
+.match-card .matchup-team.winner .team-name::after { content: " \1F3C6"; font-size: 0.8em; }
+.match-card .tbd {
+  padding: 0.6rem 0;
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.88rem;
+  text-align: center;
+}
+.match-card form { margin-top: 0.5rem; display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
+.match-card .game-pair { display: inline-flex; align-items: center; gap: 0.2rem; }
+.match-card input[type=date] { font-size: 0.78rem; padding: 0.3rem; }
+
+/* ---------------------------------------------------------------- export --- */
+
+.stat-tile {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.stat-tile .num { font-size: 1.6rem; }
+.stat-tile .label { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+
+table.preview { font-size: 0.72rem; }
+table.preview th, table.preview td { padding: 0.35rem 0.5rem; }
+
+td.winner { font-weight: 700; color: var(--accent-strong); }
+td.tbd { color: var(--text-muted); font-style: italic; }
+
+/* -------------------------------------------------------- champion banner --- */
+
+.champion-banner {
+  background: linear-gradient(135deg, var(--accent-soft), var(--surface));
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.5rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  box-shadow: var(--shadow-hover);
+}
+.champion-banner .champion-text { font-size: 1.15rem; font-weight: 700; color: var(--accent-strong); }
+.champion-banner .champion-sub {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Quick confetti burst, contained to (and overflowing slightly from) the
+   Final's match-card once it has a decided winner. */
+.confetti-burst { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.confetti-piece {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 12px;
+  opacity: 0;
+  border-radius: 1px;
+  animation: confetti-burst 1.3s ease-out forwards;
+}
+@keyframes confetti-burst {
+  0%   { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(360deg); }
+}
+/* --tx / --ty / background / animation-delay come from inline style per
+   piece (computed server-side in app.py's _generate_confetti), so any
+   number of pieces works without hand-authoring per-piece CSS rules. */
+
+/* --------------------------------------------------------------- helpers --- */
+
+.footer-note { color: var(--text-muted); font-size: 0.82rem; margin-top: 2rem; }

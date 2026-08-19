@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Export DUPR — Chandler Friends Pickleball{% endblock %}
+{% block content %}
+  <h2>Export to DUPR</h2>
+  <p class="subtitle">Only matches with a decided result are included — round-robin needs both scores
+     entered, playoffs need the best-of-3 actually won (2 games).</p>
+
+  <div class="stat-tile">
+    <span class="num">{{ row_count }}</span>
+    <span class="label">match{{ '' if row_count == 1 else 'es' }} ready to export</span>
+  </div>
+
+  <div>
+    <form method="post" action="{{ url_for('export_csv') }}">
+      <button type="submit" {{ 'disabled' if row_count == 0 }}>Download dupr_import.csv</button>
+    </form>
+  </div>
+
+  {% if rows %}
+  <h3>Preview</h3>
+  <div class="table-wrap">
+    <table class="preview">
+      <thead><tr>{% for c in columns %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>{% for c in columns %}<td>{{ row[c] }}</td>{% endfor %}</tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+{% endblock %}

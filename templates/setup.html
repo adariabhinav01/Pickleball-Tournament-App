@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Setup — Chandler Friends Pickleball{% endblock %}
+{% block content %}
+  <h2>Event Settings</h2>
+  <div class="card">
+    <form method="post" action="{{ url_for('update_settings') }}" class="settings-form">
+      <label>Event Name <input type="text" name="event_name" value="{{ settings.event_name }}"></label>
+      <label>Location <input type="text" name="location" value="{{ settings.location }}"></label>
+      <label>Score Type <input type="text" name="score_type" value="{{ settings.score_type }}"></label>
+      <label>Match Type <input type="text" name="match_type" value="{{ settings.match_type }}"></label>
+      <button type="submit">Save Settings</button>
+    </form>
+  </div>
+
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  {% if already_set_up %}
+    <h2>Teams</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Team</th><th>Player 1</th><th>DUPR ID</th><th>Email</th><th>Player 2</th><th>DUPR ID</th><th>Email</th></tr></thead>
+        <tbody>
+          {% for id, t in teams.items() %}
+          <tr>
+            <td>{{ t.id }}</td><td>{{ t.name }}</td>
+            <td>{{ t.player1_name }}</td><td>{{ t.player1_dupr_id }}</td><td>{{ t.player1_external_id }}</td>
+            <td>{{ t.player2_name }}</td><td>{{ t.player2_dupr_id }}</td><td>{{ t.player2_external_id }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <h2>Enter 9 Teams</h2>
+    <form method="post" action="{{ url_for('setup') }}">
+      <div class="teams-grid">
+        {% for i in range(1, 10) %}
+        {% set t = prefill[i - 1] %}
+        <div class="team-card">
+          <div>
+            <span class="team-num">{{ i }}</span>
+            <input type="text" name="team{{ i }}_name" value="{{ t.name }}" required>
+          </div>
+          <div class="player-row">
+            <input type="text" name="team{{ i }}_p1_name" value="{{ t.player1_name }}" placeholder="Player 1 name" required>
+            <input type="text" name="team{{ i }}_p1_dupr" value="{{ t.player1_dupr_id }}" placeholder="DUPR ID">
+          </div>
+          <input type="text" name="team{{ i }}_p1_email" value="{{ t.player1_external_id }}" placeholder="Player 1 email" class="email-input">
+          <div class="player-row">
+            <input type="text" name="team{{ i }}_p2_name" value="{{ t.player2_name }}" placeholder="Player 2 name" required>
+            <input type="text" name="team{{ i }}_p2_dupr" value="{{ t.player2_dupr_id }}" placeholder="DUPR ID">
+          </div>
+          <input type="text" name="team{{ i }}_p2_email" value="{{ t.player2_external_id }}" placeholder="Player 2 email" class="email-input">
+        </div>
+        {% endfor %}
+      </div>
+      <button type="submit" style="margin-top:1.25rem">Create Teams &amp; Generate Schedule</button>
+    </form>
+  {% endif %}
+{% endblock %}

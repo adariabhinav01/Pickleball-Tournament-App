@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Chandler Friends Pickleball{% endblock %}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%8F%93</text></svg>">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='htmx.min.js') }}"></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>🏓 Chandler Friends Pickleball</h1>
+      <nav>
+        <a href="{{ url_for('match_entry') }}" class="{{ 'active' if request.endpoint == 'match_entry' }}">Match Entry</a>
+        <a href="{{ url_for('standings') }}" class="{{ 'active' if request.endpoint == 'standings' }}">Standings</a>
+        <a href="{{ url_for('playoffs') }}" class="{{ 'active' if request.endpoint == 'playoffs' }}">Playoffs</a>
+        <a href="{{ url_for('export_page') }}" class="{{ 'active' if request.endpoint == 'export_page' }}">Export DUPR</a>
+        <a href="{{ url_for('setup') }}" class="{{ 'active' if request.endpoint == 'setup' }}">Setup</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

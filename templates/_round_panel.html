@@ -1,0 +1,48 @@
+<div id="round-panel">
+  {% if message %}
+    <p class="banner {{ 'ok' if ok else 'error' }}">{{ message }}</p>
+  {% endif %}
+
+  <div class="round-nav">
+    {% for r in range(1, 10) %}
+      <a href="{{ url_for('match_entry', round=r) }}"
+         class="{{ 'current' if r == round_num }} {{ 'done' if r in completed_rounds }}">R{{ r }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="section-heading">
+      <h3 style="margin:0">Round {{ round_num }}</h3>
+      {% if round_complete %}<span class="badge">Complete</span>{% endif %}
+    </div>
+    {% if bye_team_id %}
+      <p class="bye-note">Bye this round: <strong>{{ teams[bye_team_id].name }}</strong></p>
+    {% endif %}
+
+    {% for m in matches %}
+    <form class="match-row" hx-post="{{ url_for('submit_rr', match_id=m.id) }}" hx-target="#round-panel" hx-swap="outerHTML">
+      <span class="match-num">#{{ m.match_num }}</span>
+      <input type="hidden" name="round_num" value="{{ round_num }}">
+      <div class="scoreboard">
+        <div class="team-block team-a">
+          <span class="team-name">{{ teams[m.team_a_id].name }}</span>
+          <span class="players">{{ teams[m.team_a_id].player1_name }}</span>
+          <span class="players">{{ teams[m.team_a_id].player2_name }}</span>
+        </div>
+        <input type="number" name="g1_a" class="score-input" value="{{ m.team_a_score if m.team_a_score is not none else '' }}" min="0" required>
+        <span class="score-vs">–</span>
+        <input type="number" name="g1_b" class="score-input" value="{{ m.team_b_score if m.team_b_score is not none else '' }}" min="0" required>
+        <div class="team-block team-b">
+          <span class="team-name">{{ teams[m.team_b_id].name }}</span>
+          <span class="players">{{ teams[m.team_b_id].player1_name }}</span>
+          <span class="players">{{ teams[m.team_b_id].player2_name }}</span>
+        </div>
+      </div>
+      <div class="match-actions">
+        <input type="date" name="match_date" value="{{ m.match_date or DEFAULT_RR_DATE }}">
+        <button type="submit">{{ 'Update' if m.team_a_score is not none else 'Submit' }}</button>
+      </div>
+    </form>
+    {% endfor %}
+  </div>
+</div>

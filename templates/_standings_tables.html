@@ -1,0 +1,110 @@
+<div id="standings-tables">
+  {% if playoff_standings %}
+  <div class="card playoff-seed-card">
+    <div class="section-heading">
+      <h3 style="margin-top:0">Playoff Standings</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="standings playoff-table">
+        <thead>
+          <tr><th>Team</th><th>GW</th><th>GL</th><th>Win%</th><th>PF</th><th>PA</th><th>Diff</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for r in playoff_standings %}
+          <tr>
+            <td class="team-cell">
+              <span class="team-name-cell">{{ teams[r.team_id].name }}</span>
+              <span class="players">{{ teams[r.team_id].player1_name }}</span>
+              <span class="players">{{ teams[r.team_id].player2_name }}</span>
+            </td>
+            <td>{{ r.games_won }}</td>
+            <td>{{ r.games_lost }}</td>
+            <td>{{ "%.3f"|format(r.win_pct) }}</td>
+            <td>{{ r.points_for }}</td>
+            <td>{{ r.points_against }}</td>
+            <td>{{ r.point_diff }}</td>
+            <td>{{ r.status }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="grid-2">
+  <div>
+    <div class="section-heading">
+      <h3 style="margin-top:0">Live Standings</h3>
+      <span class="hint">updates as scores are entered</span>
+    </div>
+    <div class="table-wrap">
+      <table class="standings">
+        <thead>
+          <tr><th>#</th><th>Team</th><th>W</th><th>L</th><th>Win%</th><th>PF</th><th>PA</th><th>Diff</th></tr>
+        </thead>
+        <tbody>
+          {% for r in live %}
+          <tr>
+            <td>{{ r.final_rank }}</td>
+            <td class="team-cell">
+              <span class="team-name-cell">{{ teams[r.team_id].name }}</span>
+              <span class="players">{{ teams[r.team_id].player1_name }}</span>
+              <span class="players">{{ teams[r.team_id].player2_name }}</span>
+            </td>
+            <td>{{ r.wins }}</td>
+            <td>{{ r.losses }}</td>
+            <td>{{ "%.3f"|format(r.win_pct) }}</td>
+            <td>{{ r.points_for }}</td>
+            <td>{{ r.points_against }}</td>
+            <td>{{ r.point_diff }}</td>
+          </tr>
+          {% if loop.index == 8 and not loop.last %}
+          <tr class="playoff-cutoff-label"><td colspan="8">Playoff cutoff — top 8 advance</td></tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-heading">
+      <h3 style="margin-top:0">As of Last Completed Round</h3>
+      {% if snap_round %}<span class="hint">Round {{ snap_round }}</span>{% else %}<span class="hint">no round completed yet</span>{% endif %}
+    </div>
+    {% if snap_rows %}
+    <div class="table-wrap">
+      <table class="standings">
+        <thead>
+          <tr><th>#</th><th>Team</th><th>W</th><th>L</th><th>Win%</th><th>PF</th><th>PA</th><th>Diff</th></tr>
+        </thead>
+        <tbody>
+          {% for r in snap_rows %}
+          <tr>
+            <td>{{ r.rank }}</td>
+            <td class="team-cell">
+              <span class="team-name-cell">{{ teams[r.team_id].name }}</span>
+              <span class="players">{{ teams[r.team_id].player1_name }}</span>
+              <span class="players">{{ teams[r.team_id].player2_name }}</span>
+            </td>
+            <td>{{ r.wins }}</td>
+            <td>{{ r.losses }}</td>
+            <td>{{ "%.3f"|format(r.win_pct) }}</td>
+            <td>{{ r.points_for }}</td>
+            <td>{{ r.points_against }}</td>
+            <td>{{ r.point_diff }}</td>
+          </tr>
+          {% if loop.index == 8 and not loop.last %}
+          <tr class="playoff-cutoff-label"><td colspan="8">Playoff cutoff — top 8 advance</td></tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="hint">Snapshot appears automatically once Round 1 is fully entered.</p>
+    {% endif %}
+  </div>
+  </div>
+</div>
