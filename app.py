@@ -26,78 +26,7 @@ def _generate_confetti(n=28):
         })
     return pieces
 
-
 CONFETTI_PIECES = _generate_confetti()
-
-# Real roster for this event, pulled from the original workbook's Teams/Members
-# sheets (the Teams sheet's own DuprId/email lookup formulas were never
-# recalculated in Excel, so these were resolved by matching names against
-# Members instead). Used only to pre-fill the one-time Setup form.
-# player*_external_id is DUPR's "ExternalId" field, which is each player's email.
-PREFILL_TEAMS = [
-    {"name": "Team 1", "player1_name": "Sivanaga Chatakonda", "player1_dupr_id": "DD76PL",
-     "player1_external_id": "cshiva83@gmail.com",
-     "player2_name": "Santhosh Kolluri", "player2_dupr_id": "NNP2RN",
-     "player2_external_id": "skolluri812@gmail.com"},
-    {"name": "Team 2", "player1_name": "Kelvin Silakhom", "player1_dupr_id": "G7J96M",
-     "player1_external_id": "ksilakhom@gmail.com",
-     "player2_name": "Murthy Adari", "player2_dupr_id": "Q92WM4",
-     "player2_external_id": "avnmurthy@gmail.com"},
-    {"name": "Team 3", "player1_name": "Santosh Ayala", "player1_dupr_id": "G7JYWX",
-     "player1_external_id": "santosha.a@gmail.com",
-     "player2_name": "Naveen Bandi", "player2_dupr_id": "MZOYXO",
-     "player2_external_id": "naveen.bandi86@gmail.com"},
-    {"name": "Team 4", "player1_name": "Srikanth Thirunahari", "player1_dupr_id": "DD7ZL6",
-     "player1_external_id": "srik.thirunahari@gmail.com",
-     "player2_name": "Ravi Choppalli", "player2_dupr_id": "KZNJ4O",
-     "player2_external_id": "rkchoppalli@gmail.com"},
-    {"name": "Team 5", "player1_name": "Bala Bandi", "player1_dupr_id": "57N2MR",
-     "player1_external_id": "balaswamy.bandi@gmail.com",
-     "player2_name": "Anil Mudigonda", "player2_dupr_id": "PPX2WM",
-     "player2_external_id": "anilpraveen@yahoo.com"},
-    {"name": "Team 6", "player1_name": "Ravi Kiran Diwakarla", "player1_dupr_id": "DD0MRY",
-     "player1_external_id": "ravikiran.diwakarla@gmail.com",
-     "player2_name": "Vivekan Shanmugam", "player2_dupr_id": "MZMXQL",
-     "player2_external_id": "s.vivekan@gmail.com"},
-    {"name": "Team 7", "player1_name": "Lakshmi Malagaveli", "player1_dupr_id": "VL0VE7",
-     "player1_external_id": "reddy.ml@gmail.com",
-     "player2_name": "Srini Nampelly", "player2_dupr_id": "6PQMRG",
-     "player2_external_id": "nampelly.srinivas@gmail.com"},
-    {"name": "Team 8", "player1_name": "RamPrasad Alla", "player1_dupr_id": "P5O0YZ",
-     "player1_external_id": "ramprasad.alla@gmail.com",
-     "player2_name": "Vijaya Kumar Rani", "player2_dupr_id": "7K7DM5",
-     "player2_external_id": "rvkumar@gmail.com"},
-    {"name": "Team 9", "player1_name": "Venugopal Ambadipudi", "player1_dupr_id": "WKZ4XK",
-     "player1_external_id": "gopalav@gmail.com",
-     "player2_name": "Rajesh Kolluru", "player2_dupr_id": "2D4KY9",
-     "player2_external_id": "rajeshk.kolluru@gmail.com"},
-]
-
-# Round robin was played and fully scored on 8/15; baked in here (same idea
-# as PREFILL_TEAMS) so a database reset -- e.g. after a future schema change
-# -- doesn't lose that day's real results and force re-entering all 36
-# matches by hand. Applied automatically right after teams are created.
-# (round, match_num, team_a_score, team_b_score, date)
-PREFILL_RR_SCORES = [
-    (1, 1, 9, 11, "2026-08-15"), (1, 2, 9, 11, "2026-08-15"), (1, 3, 5, 11, "2026-08-15"), (1, 4, 8, 11, "2026-08-15"),
-    (2, 1, 5, 11, "2026-08-15"), (2, 2, 9, 11, "2026-08-15"), (2, 3, 7, 11, "2026-08-15"), (2, 4, 9, 11, "2026-08-15"),
-    (3, 1, 11, 9, "2026-08-15"), (3, 2, 11, 1, "2026-08-15"), (3, 3, 4, 11, "2026-08-15"), (3, 4, 4, 11, "2026-08-15"),
-    (4, 1, 6, 11, "2026-08-15"), (4, 2, 8, 11, "2026-08-15"), (4, 3, 11, 7, "2026-08-15"), (4, 4, 6, 11, "2026-08-15"),
-    (5, 1, 10, 12, "2026-08-15"), (5, 2, 11, 5, "2026-08-15"), (5, 3, 7, 11, "2026-08-15"), (5, 4, 11, 7, "2026-08-15"),
-    (6, 1, 4, 11, "2026-08-15"), (6, 2, 5, 11, "2026-08-15"), (6, 3, 11, 7, "2026-08-15"), (6, 4, 10, 12, "2026-08-15"),
-    (7, 1, 9, 11, "2026-08-15"), (7, 2, 2, 11, "2026-08-15"), (7, 3, 11, 7, "2026-08-15"), (7, 4, 2, 11, "2026-08-15"),
-    (8, 1, 3, 11, "2026-08-15"), (8, 2, 11, 8, "2026-08-15"), (8, 3, 7, 11, "2026-08-15"), (8, 4, 11, 4, "2026-08-15"),
-    (9, 1, 5, 11, "2026-08-15"), (9, 2, 11, 9, "2026-08-15"), (9, 3, 8, 11, "2026-08-15"), (9, 4, 11, 1, "2026-08-15"),
-]
-
-# Round robin was played on 8/15, playoffs are on 8/16 -- pre-fill each
-# screen's date field accordingly so the operator doesn't have to set it
-# match after match.
-DEFAULT_RR_DATE = "2026-08-15"
-DEFAULT_PLAYOFF_DATE = "2026-08-16"
-app.jinja_env.globals["DEFAULT_RR_DATE"] = DEFAULT_RR_DATE
-app.jinja_env.globals["DEFAULT_PLAYOFF_DATE"] = DEFAULT_PLAYOFF_DATE
-
 
 class InvalidScore(ValueError):
     pass
@@ -147,13 +76,11 @@ def setup():
                 "player2_external_id": request.form.get(f"team{i}_p2_email", "").strip(),
             })
         db.create_teams_and_schedule(teams_data)
-        db.prefill_round_robin_scores(PREFILL_RR_SCORES)
         return redirect(url_for("match_entry"))
 
     return render_template("setup.html", settings=db.get_settings(),
                             already_set_up=db.is_tournament_set_up(),
-                            teams=db.get_teams() if db.is_tournament_set_up() else None,
-                            prefill=PREFILL_TEAMS)
+                            teams=db.get_teams() if db.is_tournament_set_up() else None)
 
 
 @app.route("/setup/settings", methods=["POST"])
